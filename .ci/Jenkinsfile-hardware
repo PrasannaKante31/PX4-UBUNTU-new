@@ -633,7 +633,7 @@ pipeline {
     } // stage Hardware Test
   } // stages
   environment {
-    CCACHE_DIR = 'var/lib/ccache'
+    CCACHE_DIR = '/var/lib/ccache'
     CCACHE_NOHASHDIR = 1
     CI = true
   }

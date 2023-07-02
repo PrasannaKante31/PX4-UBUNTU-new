@@ -318,6 +318,7 @@ pipeline {
               }
               steps {
                 checkoutSCM()
+		sh 'chmod 777 /tmp/ccache'
                 sh 'make px4_fmu-v5_debug'
                 sh 'make px4_fmu-v5_debug bootloader_elf'
                 sh 'ccache -s -v'

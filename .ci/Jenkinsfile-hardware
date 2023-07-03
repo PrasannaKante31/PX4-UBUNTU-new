@@ -313,7 +313,7 @@ pipeline {
               agent {
                 docker {
                   image 'px4io/px4-dev-nuttx-focal:2021-09-08'
-                  args '--cpu-shares 512 -e CCACHE_BASEDIR=$WORKSPACE -v ${CCACHE_DIR}:${CCACHE_DIR}:rw -D CMAKE_CXX_COMPILER=/usr/bin/c++'
+                  args '--cpu-shares 512 -e CCACHE_BASEDIR=$WORKSPACE -v ${CCACHE_DIR}:${CCACHE_DIR}:rw CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++'
                 }
               }
               steps {

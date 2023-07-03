@@ -313,7 +313,7 @@ pipeline {
               agent {
                 docker {
                   image 'px4io/px4-dev-nuttx-focal:2021-09-08'
-                  args '--cpu-shares 512 -e CCACHE_BASEDIR=$WORKSPACE -v ${CCACHE_DIR}:${CCACHE_DIR}:rw'
+                  args '--cpu-shares -u 0 512 -e CCACHE_BASEDIR=$WORKSPACE -v ${CCACHE_DIR}:${CCACHE_DIR}:rw'
                 }
               }
               steps {
@@ -634,7 +634,7 @@ pipeline {
     } // stage Hardware Test
   } // stages
   environment {
-    CCACHE_DIR = '/tmp/ccache'
+    CCACHE_DIR = '/usr/lib/ccache'
     CCACHE_NOHASHDIR = 1
     CI = true
   }

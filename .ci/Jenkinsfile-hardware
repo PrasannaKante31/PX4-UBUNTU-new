@@ -313,7 +313,7 @@ pipeline {
               agent {
                 docker {
                   image 'px4io/px4-dev-nuttx-focal:2021-09-08'
-                  args '--cpu-shares 512 -e CCACHE_BASEDIR=$WORKSPACE -v ${CCACHE_DIR}:${CCACHE_DIR}:rw -D CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++'
+                  args '--cpu-shares 512 -e CCACHE_BASEDIR=$WORKSPACE -v ${CCACHE_DIR}:${CCACHE_DIR}:rw '
                 }
               }
               steps {
@@ -647,10 +647,14 @@ pipeline {
 
 void checkoutSCM() {
   retry(3) {
-    checkout scm
+//    checkout scm
+    sh 'cd /var/run/workspace/dev_base_nuttx'
+    sh 'git clone https://github.com/PrasannaKante31/PX4-UBUNTU-new.git'
+    sh 'git fetch --tags https://github.com/PrasannaKante31/PX4-UBUNTU-new.git'
+    sh 'cd PX4-UBUNTU-new'
     sh 'export'
     sh 'make distclean; git clean -ff -x -d .'
-    sh 'git fetch --tags'
+  //  sh 'git fetch --tags'
     sh 'ccache -z'
   }
 }

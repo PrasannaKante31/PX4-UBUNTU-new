@@ -649,10 +649,16 @@ void checkoutSCM() {
   retry(3) {
 //    checkout scm
     sh 'cd /var/run/workspace/dev_base_nuttx'
-    sh 'git clone https://github.com/PrasannaKante31/PX4-UBUNTU-new.git'
-    sh 'cd PX4-UBUNTU-new'
+    sh '''
+    if (fileExists( 'PX4-UBUNTU-new' ){
+        cd PX4-UBUNTU-new
+    }
+    else {
+        git clone https://github.com/PrasannaKante31/PX4-UBUNTU-new.git
+        cd PX4-UBUNTU-new
+    }
+    '''
     sh 'git fetch --tags https://github.com/PrasannaKante31/PX4-UBUNTU-new.git'
-    sh 'cd PX4-UBUNTU-new'
     sh 'export'
     sh 'make distclean; git clean -ff -x -d .'
   //  sh 'git fetch --tags'

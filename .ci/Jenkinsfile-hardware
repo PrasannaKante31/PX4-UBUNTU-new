@@ -647,21 +647,10 @@ pipeline {
 
 void checkoutSCM() {
   retry(3) {
-//    checkout scm
-    sh 'cd /var/run/workspace/dev_base_nuttx'
-    sh '''
-    if (fileExists("PX4-UBUNTU-new")){
-        cd PX4-UBUNTU-new
-    }
-    else {
-        git clone https://github.com/PrasannaKante31/PX4-UBUNTU-new.git
-        cd PX4-UBUNTU-new
-    }
-    '''
-    sh 'git fetch --tags https://github.com/PrasannaKante31/PX4-UBUNTU-new.git'
+   checkout scm
     sh 'export'
     sh 'make distclean; git clean -ff -x -d .'
-  //  sh 'git fetch --tags'
+    sh 'git fetch --tags'
     sh 'ccache -z'
   }
 }

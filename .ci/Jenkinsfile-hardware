@@ -650,7 +650,7 @@ void checkoutSCM() {
 //    checkout scm
     sh 'cd /var/run/workspace/dev_base_nuttx'
     sh '''
-    if (fileExists( 'PX4-UBUNTU-new' ){
+    if (fileExists( 'PX4-UBUNTU-new' )){
         cd PX4-UBUNTU-new
     }
     else {

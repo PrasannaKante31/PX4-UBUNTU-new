@@ -317,6 +317,7 @@ pipeline {
                 }
               }
               steps {
+		sh 'apt-get -y install cmake'
                 checkoutSCM()
 		
                 sh 'make px4_fmu-v5_debug'

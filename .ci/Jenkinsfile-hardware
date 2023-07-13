@@ -650,6 +650,7 @@ void checkoutSCM() {
 //    checkout scm
     sh 'cd /var/run/workspace/dev_base_nuttx'
     sh 'git clone https://github.com/PrasannaKante31/PX4-UBUNTU-new.git'
+    sh 'cd PX4-UBUNTU-new'
     sh 'git fetch --tags https://github.com/PrasannaKante31/PX4-UBUNTU-new.git'
     sh 'cd PX4-UBUNTU-new'
     sh 'export'

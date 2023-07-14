@@ -313,7 +313,7 @@ pipeline {
               agent {
                 docker {
                   image 'px4io/px4-dev-nuttx-focal:2021-09-08'
-                  args '-u --memory="2g" 0 --cpu-shares 1028 -e CCACHE_BASEDIR=$WORKSPACE -v ${CCACHE_DIR}:${CCACHE_DIR}:rw '
+                  args '-u 0 --cpu-shares 1028 -e CCACHE_BASEDIR=$WORKSPACE -v ${CCACHE_DIR}:${CCACHE_DIR}:rw '
                 }
               }
               steps {

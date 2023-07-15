@@ -28,117 +28,117 @@ pipeline {
           }
         }
 
-        stage('Parameter') {
-          agent {
-            docker { image 'px4io/px4-dev-base-focal:2021-08-18' }
-          }
-          steps {
-            sh 'make distclean; git clean -ff -x -d .'
-            sh 'git fetch --all --tags'
-            sh 'make parameters_metadata'
-            dir('build/px4_sitl_default/docs') {
-              archiveArtifacts(artifacts: 'parameters.md, parameters.xml, parameters.json.xz')
-              stash includes: 'parameters.md, parameters.xml, parameters.json.xz', name: 'metadata_parameters'
-            }
-          }
-          post {
-            always {
-              sh 'make distclean; git clean -ff -x -d .'
-            }
-          }
-        }
+        // stage('Parameter') {
+        //   agent {
+        //     docker { image 'px4io/px4-dev-base-focal:2021-08-18' }
+        //   }
+        //   steps {
+        //     sh 'make distclean; git clean -ff -x -d .'
+        //     sh 'git fetch --all --tags'
+        //     sh 'make parameters_metadata'
+        //     dir('build/px4_sitl_default/docs') {
+        //       archiveArtifacts(artifacts: 'parameters.md, parameters.xml, parameters.json.xz')
+        //       stash includes: 'parameters.md, parameters.xml, parameters.json.xz', name: 'metadata_parameters'
+        //     }
+        //   }
+        //   post {
+        //     always {
+        //       sh 'make distclean; git clean -ff -x -d .'
+        //     }
+        //   }
+        // }
 
-        stage('Module') {
-          agent {
-            docker { image 'px4io/px4-dev-base-focal:2021-08-18' }
-          }
-          steps {
-            sh 'make distclean; git clean -ff -x -d .'
-            sh 'git fetch --all --tags'
-            sh 'make module_documentation'
-            dir('build/px4_sitl_default/docs') {
-              archiveArtifacts(artifacts: 'modules/*.md')
-              stash includes: 'modules/*.md', name: 'metadata_module_documentation'
-            }
-          }
-          post {
-            always {
-              sh 'make distclean; git clean -ff -x -d .'
-            }
-          }
-        }
+        // stage('Module') {
+        //   agent {
+        //     docker { image 'px4io/px4-dev-base-focal:2021-08-18' }
+        //   }
+        //   steps {
+        //     sh 'make distclean; git clean -ff -x -d .'
+        //     sh 'git fetch --all --tags'
+        //     sh 'make module_documentation'
+        //     dir('build/px4_sitl_default/docs') {
+        //       archiveArtifacts(artifacts: 'modules/*.md')
+        //       stash includes: 'modules/*.md', name: 'metadata_module_documentation'
+        //     }
+        //   }
+        //   post {
+        //     always {
+        //       sh 'make distclean; git clean -ff -x -d .'
+        //     }
+        //   }
+        // }
 
-        stage('msg file docs') {
-          agent {
-            docker { image 'px4io/px4-dev-base-focal:2021-08-18' }
-          }
-          steps {
-            sh 'mkdir -p build/msg_docs; ./Tools/msg/generate_msg_docs.py -d build/msg_docs'
-            dir('build') {
-              archiveArtifacts(artifacts: 'msg_docs/*.md')
-              stash includes: 'msg_docs/*.md', name: 'msg_documentation'
-            }
-          }
-          post {
-            always {
-              sh 'make distclean; git clean -ff -x -d .'
-            }
-          }
-        }
+        // stage('msg file docs') {
+        //   agent {
+        //     docker { image 'px4io/px4-dev-base-focal:2021-08-18' }
+        //   }
+        //   steps {
+        //     sh 'mkdir -p build/msg_docs; ./Tools/msg/generate_msg_docs.py -d build/msg_docs'
+        //     dir('build') {
+        //       archiveArtifacts(artifacts: 'msg_docs/*.md')
+        //       stash includes: 'msg_docs/*.md', name: 'msg_documentation'
+        //     }
+        //   }
+        //   post {
+        //     always {
+        //       sh 'make distclean; git clean -ff -x -d .'
+        //     }
+        //   }
+        // }
 
-        stage('failsafe docs') {
-          agent {
-            docker { image 'px4io/px4-dev-nuttx-focal:2021-08-18' }
-          }
-          steps {
-            sh '''#!/bin/bash -l
-            echo $0;
-            git clone https://github.com/emscripten-core/emsdk.git _emscripten_sdk;
-            cd _emscripten_sdk;
-            ./emsdk install latest;
-            ./emsdk activate latest;
-            cd ..;
-            . ./_emscripten_sdk/emsdk_env.sh;
-            make failsafe_web;
-            cd build/px4_sitl_default_failsafe_web;
-            mkdir -p failsafe_sim;
-            cp index.* parameters.json failsafe_sim;
-            '''
-            dir('build/px4_sitl_default_failsafe_web') {
-              archiveArtifacts(artifacts: 'failsafe_sim/*')
-              stash includes: 'failsafe_sim/*', name: 'failsafe_sim'
-            }
-          }
-          post {
-            always {
-              sh 'make distclean; git clean -ff -x -d .'
-            }
-          }
-        }
+        // stage('failsafe docs') {
+        //   agent {
+        //     docker { image 'px4io/px4-dev-nuttx-focal:2021-08-18' }
+        //   }
+        //   steps {
+        //     sh '''#!/bin/bash -l
+        //     echo $0;
+        //     git clone https://github.com/emscripten-core/emsdk.git _emscripten_sdk;
+        //     cd _emscripten_sdk;
+        //     ./emsdk install latest;
+        //     ./emsdk activate latest;
+        //     cd ..;
+        //     . ./_emscripten_sdk/emsdk_env.sh;
+        //     make failsafe_web;
+        //     cd build/px4_sitl_default_failsafe_web;
+        //     mkdir -p failsafe_sim;
+        //     cp index.* parameters.json failsafe_sim;
+        //     '''
+        //     dir('build/px4_sitl_default_failsafe_web') {
+        //       archiveArtifacts(artifacts: 'failsafe_sim/*')
+        //       stash includes: 'failsafe_sim/*', name: 'failsafe_sim'
+        //     }
+        //   }
+        //   post {
+        //     always {
+        //       sh 'make distclean; git clean -ff -x -d .'
+        //     }
+        //   }
+        // }
 
-        stage('uORB graphs') {
-          agent {
-            docker {
-              image 'px4io/px4-dev-nuttx-focal:2021-08-18'
-              args '-e CCACHE_BASEDIR=$WORKSPACE -v ${CCACHE_DIR}:${CCACHE_DIR}:rw'
-            }
-          }
-          steps {
-            sh 'export'
-            sh 'make distclean; git clean -ff -x -d .'
-            sh 'git fetch --all --tags'
-            sh 'make uorb_graphs'
-            dir('Tools/uorb_graph') {
-              archiveArtifacts(artifacts: 'graph_*.json')
-              stash includes: 'graph_*.json', name: 'uorb_graph'
-            }
-          }
-          post {
-            always {
-              sh 'make distclean; git clean -ff -x -d .'
-            }
-          }
-        }
+        // stage('uORB graphs') {
+        //   agent {
+        //     docker {
+        //       image 'px4io/px4-dev-nuttx-focal:2021-08-18'
+        //       args '-e CCACHE_BASEDIR=$WORKSPACE -v ${CCACHE_DIR}:${CCACHE_DIR}:rw'
+        //     }
+        //   }
+        //   steps {
+        //     sh 'export'
+        //     sh 'make distclean; git clean -ff -x -d .'
+        //     sh 'git fetch --all --tags'
+        //     sh 'make uorb_graphs'
+        //     dir('Tools/uorb_graph') {
+        //       archiveArtifacts(artifacts: 'graph_*.json')
+        //       stash includes: 'graph_*.json', name: 'uorb_graph'
+        //     }
+        //   }
+        //   post {
+        //     always {
+        //       sh 'make distclean; git clean -ff -x -d .'
+        //     }
+        //   }
+        // }
 
       } // parallel
     } // stage: Generate Metadata

@@ -332,7 +332,7 @@ pipeline {
             } // stage build
             stage("hardware") {
               agent {
-                label 'linux'
+                label 'fmu-v5'
               }
               stages {
                 stage("flash") {

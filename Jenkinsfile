@@ -8,25 +8,25 @@ pipeline {
       
       parallel {
 
-        stage('Airframe') {
-          agent {
-            docker { image 'px4io/px4-dev-base-focal:2021-08-18' }
-          }
-          steps {
-            sh 'make distclean; git clean -ff -x -d .'
-            sh 'git fetch --all --tags'
-            sh 'make airframe_metadata'
-            dir('build/px4_sitl_default/docs') {
-              archiveArtifacts(artifacts: 'airframes.md, airframes.xml')
-              stash includes: 'airframes.md, airframes.xml', name: 'metadata_airframes'
-            }
-          }
-          post {
-            always {
-              sh 'make distclean; git clean -ff -x -d .'
-            }
-          }
-        }
+        // stage('Airframe') {
+        //   agent {
+        //     docker { image 'px4io/px4-dev-base-focal:2021-08-18' }
+        //   }
+        //   steps {
+        //     sh 'make distclean; git clean -ff -x -d .'
+        //     sh 'git fetch --all --tags'
+        //     sh 'make airframe_metadata'
+        //     dir('build/px4_sitl_default/docs') {
+        //       archiveArtifacts(artifacts: 'airframes.md, airframes.xml')
+        //       stash includes: 'airframes.md, airframes.xml', name: 'metadata_airframes'
+        //     }
+        //   }
+        //   post {
+        //     always {
+        //       sh 'make distclean; git clean -ff -x -d .'
+        //     }
+        //   }
+        // }
 
         stage('Parameter') {
           agent {
@@ -48,43 +48,43 @@ pipeline {
           }
         }
 
-        stage('Module') {
-          agent {
-            docker { image 'px4io/px4-dev-base-focal:2021-08-18' }
-          }
-          steps {
-            sh 'make distclean; git clean -ff -x -d .'
-            sh 'git fetch --all --tags'
-            sh 'make module_documentation'
-            dir('build/px4_sitl_default/docs') {
-              archiveArtifacts(artifacts: 'modules/*.md')
-              stash includes: 'modules/*.md', name: 'metadata_module_documentation'
-            }
-          }
-          post {
-            always {
-              sh 'make distclean; git clean -ff -x -d .'
-            }
-          }
-        }
+        // stage('Module') {
+        //   agent {
+        //     docker { image 'px4io/px4-dev-base-focal:2021-08-18' }
+        //   }
+        //   steps {
+        //     sh 'make distclean; git clean -ff -x -d .'
+        //     sh 'git fetch --all --tags'
+        //     sh 'make module_documentation'
+        //     dir('build/px4_sitl_default/docs') {
+        //       archiveArtifacts(artifacts: 'modules/*.md')
+        //       stash includes: 'modules/*.md', name: 'metadata_module_documentation'
+        //     }
+        //   }
+        //   post {
+        //     always {
+        //       sh 'make distclean; git clean -ff -x -d .'
+        //     }
+        //   }
+        // }
 
-        stage('msg file docs') {
-          agent {
-            docker { image 'px4io/px4-dev-base-focal:2021-08-18' }
-          }
-          steps {
-            sh 'mkdir -p build/msg_docs; ./Tools/msg/generate_msg_docs.py -d build/msg_docs'
-            dir('build') {
-              archiveArtifacts(artifacts: 'msg_docs/*.md')
-              stash includes: 'msg_docs/*.md', name: 'msg_documentation'
-            }
-          }
-          post {
-            always {
-              sh 'make distclean; git clean -ff -x -d .'
-            }
-          }
-        }
+        // stage('msg file docs') {
+        //   agent {
+        //     docker { image 'px4io/px4-dev-base-focal:2021-08-18' }
+        //   }
+        //   steps {
+        //     sh 'mkdir -p build/msg_docs; ./Tools/msg/generate_msg_docs.py -d build/msg_docs'
+        //     dir('build') {
+        //       archiveArtifacts(artifacts: 'msg_docs/*.md')
+        //       stash includes: 'msg_docs/*.md', name: 'msg_documentation'
+        //     }
+        //   }
+        //   post {
+        //     always {
+        //       sh 'make distclean; git clean -ff -x -d .'
+        //     }
+        //   }
+        // }
 
         stage('failsafe docs') {
           agent {
